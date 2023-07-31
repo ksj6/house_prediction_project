@@ -32,5 +32,16 @@ def predict_api():
     # Return the prediction as JSON response
     return jsonify(output[0])
 
+
+# for creating a form for giving the inputs by iser in html page and then calculating the result
+@app.route('/predict' , methods=['POST'])
+def predict():
+    data = [float(x) for x in request.form.values()] # capturing th values in the form which are in input given  
+    final_input = scalar.transform(np.array(data).reshape(1 , -1))
+    print(final_input)
+    output = regmodel.predict(final_input)[0] # the final output of the regression model
+    # rendering a specific html page 
+    return render_template("home.html" , prediction_text="The final House Price Prediction is {}".format(output))
+
 if __name__ == "__main__":
     app.run(debug=True)
